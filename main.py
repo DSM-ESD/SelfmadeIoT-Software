@@ -19,10 +19,24 @@ class Main(QWidget):
         self.setButton.setGeometry(860,20,200,80)
         self.chageButton = ButtonWidget('white', 10, 12, 'Arial', 'like', self) # 기기 변경 버튼
         self.chageButton.setGeometry(1080,20,200,80)
+        self.isDragging = False
+        self.temp = LabelWidget('red', 12, self)
+        self.temp.setGeometry(50,50,50,50)
+
+    def mousePressEvent(self, e):
+        if not self.widgetBox.geometry().contains(e.x(), e.y()):
+            return
+        self.isDragging = True
+
+    def mouseMoveEvent(self, e):
+        if not self.isDragging or e.buttons() & Qt.NoButton:
+            return
+        self.temp.move(e.x(), e.y())
         
 
-
-
+    def mouseReleaseEvent(self, e):
+        self.isDragging = False
+        
 
 if __name__ == '__main__':
     import sys
