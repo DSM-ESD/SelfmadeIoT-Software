@@ -2,27 +2,23 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from widgets.LabelWidget import *
+from widgets.ButtonWidget import *
 
 class Main(QWidget):
     def __init__(self):
         super().__init__()
-        self.resize(1500,800)
+        self.resize(1300,800)
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setStyleSheet('Main { background-color: #0070C0 }')
         self.widgetBox = LabelWidget('white', 0, self)
         self.widgetBox.setGeometry(20,20,260,760)
         self.codeBox = LabelWidget('white', 0, self)
-        self.codeBox.setGeometry(300,120,1180,660)
+        self.codeBox.setGeometry(300,120,980,660)
 
-    def mousePressEvent(self, e):
-        print('clicked')
-
-    def mouseMoveEvent(self, e):
-        if (e.buttons() & ~Qt.NoButton):
-            print('moving')
-
-    def mouseReleaseEvent(self, e):
-        print('released')
+        self.setButton = ButtonWidget('white', 10, 15, 'Arial', '기기 설정', self) # 기기 설정 버튼
+        self.setButton.setGeometry(860,20,200,80)
+        self.chageButton = ButtonWidget('white', 10, 12, 'Arial', 'like', self) # 기기 변경 버튼
+        self.chageButton.setGeometry(1080,20,200,80)
         
 
 
