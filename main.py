@@ -15,7 +15,7 @@ class Main(QWidget):
 
         self.setButton = ButtonWidget('white', 10, 15, 'Arial', '기기 설정', self) # 기기 설정 버튼
         self.setButton.setGeometry(860,20,200,80)
-        self.chageButton = ButtonWidget('white', 10, 12, 'Arial', 'like', self) # 기기 변경 버튼
+        self.chageButton = ButtonWidget('white', 10, 15, 'Arial', 'like', self) # 기기 변경 버튼
         self.chageButton.setGeometry(1080,20,200,80)
         self.isDragging = False
         self.temp = LabelWidget('red', 12, self)
