@@ -10,10 +10,8 @@ class Main(QWidget):
         self.resize(1300,800)
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setStyleSheet('Main { background-color: #0070C0 }')
-        self.widgetBox = LabelWidget('white', 0, self)
-        self.widgetBox.setGeometry(20,20,260,760)
-        self.codeBox = LabelWidget('white', 0, self)
-        self.codeBox.setGeometry(300,120,980,660)
+        self.widgetBox = QRect(20,20,260,760)
+        self.codeBox = QRect(300,120,980,660)
 
         self.setButton = ButtonWidget('white', 10, 15, 'Arial', '기기 설정', self) # 기기 설정 버튼
         self.setButton.setGeometry(860,20,200,80)
@@ -23,8 +21,14 @@ class Main(QWidget):
         self.temp = LabelWidget('red', 12, self)
         self.temp.setGeometry(50,50,50,50)
 
+    def paintEvent(self, e):
+        qp = QPainter(self)
+        qp.fillRect(self.widgetBox, QColor('white'))
+        qp.fillRect(self.codeBox, QColor('white'))
+        qp.end()
+
     def mousePressEvent(self, e):
-        if not self.widgetBox.geometry().contains(e.x(), e.y()):
+        if not self.widgetBox.contains(e.x(), e.y()):
             return
         self.isDragging = True
 
@@ -33,7 +37,6 @@ class Main(QWidget):
             return
         self.temp.move(e.x(), e.y())
         
-
     def mouseReleaseEvent(self, e):
         self.isDragging = False
         
