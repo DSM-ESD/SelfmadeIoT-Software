@@ -14,14 +14,14 @@ class Main(QWidget):
         self.widgetBox = QRect(20,20,260,760)
         self.codeBox = QRect(300,120,980,660)
 
-        self.setButton = ButtonWidget('white', 10, 15, 'Arial', '기기 설정', self) # 기기 설정 버튼
+        self.setButton = ButtonWidget('white', 10, 16, '나눔스퀘어', '기기 설정', self) # 기기 설정 버튼
         self.setButton.setGeometry(860,20,200,70)
 
-        self.changeComboButton = ComboButtonWidget('white', 10, 15, 'Arial', self) # 기기 변경 버튼
+        self.changeComboButton = ComboButtonWidget('white', 10, 16, '나눔스퀘어', self) # 기기 변경 버튼
         self.changeComboButton.setGeometry(1080,20,200,70)
-        self.changeComboButton.addItem('안방 조명')
-        self.changeComboButton.addItem('거실 환풍기')
-        self.changeComboButton.addItem('거실 에어컨')
+        self.changeComboButton.addItem(' 안방 조명')
+        self.changeComboButton.addItem(' 거실 환풍기')
+        self.changeComboButton.addItem(' 거실 에어컨')
 
         self.isDragging = False
         self.temp = LabelWidget('red', 12, self)
