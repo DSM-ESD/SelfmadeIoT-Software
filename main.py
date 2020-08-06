@@ -29,25 +29,13 @@ class Main(QWidget):
         self.temp.setGeometry(50,50,50,50)
         
 
-
     def paintEvent(self, e):
         qp = QPainter(self)
         qp.fillRect(self.widgetBox, QColor('white'))
         qp.fillRect(self.codeBox, QColor('white'))
         qp.end()
 
-    def mousePressEvent(self, e):
-        if not self.widgetBox.contains(e.x(), e.y()):
-            return
-        self.isDragging = True
-
-    def mouseMoveEvent(self, e):
-        if not self.isDragging or e.buttons() & Qt.NoButton:
-            return
-        self.temp.move(e.x(), e.y())
         
-    def mouseReleaseEvent(self, e):
-        self.isDragging = False
         
 
 if __name__ == '__main__':
