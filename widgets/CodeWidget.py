@@ -6,7 +6,9 @@ class CodeWidget(LabelWidget):
         super().__init__(color, border, parent)
         self.hasParent = False
         self.hasChild = False
+        self.enableMove = True
         self.color = color
+        
         
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -16,6 +18,9 @@ class CodeWidget(LabelWidget):
             painter.fillRect(0, self.height() / 2, self.width(), self.height() / 2, QColor(self.color))
         painter.end()
     
+    def setEnableMove(self, enable):
+        self.enableMove = enable
+
     def setParentState(self, parent):
         self.hasParent(parent)
         self.update()
