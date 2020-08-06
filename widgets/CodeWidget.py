@@ -7,10 +7,13 @@ class CodeWidget(LabelWidget):
         self.hasParent = False
         self.hasChild = False
         self.enableMove = True
+        self.isDragging = False
         self.color = color
-        
+        self.startPt = QPoint()
+        self.setStyleSheet(self.styleSheet() + 'CodeWidget { font: 15pt 나눔스퀘어; color: white} ')
         
     def paintEvent(self, event):
+        super().paintEvent(event)
         painter = QPainter(self)
         if self.hasParent:
             painter.fillRect(0, 0, self.width(), self.height() / 2, QColor(self.color))
@@ -30,13 +33,15 @@ class CodeWidget(LabelWidget):
         self.update()
 
     def mousePressEvent(self, e):
-        self.isDragging = True
+        if self.enableMove:
+            self.isDragging = True
+        self.startPt = QPoint(e.x(), e.y())
 
     def mouseMoveEvent(self, e):
         if not self.isDragging or e.buttons() & Qt.NoButton:
             return
         pt = self.mapToParent(QPoint(e.x(), e.y()))
-        pt -= QPoint(self.width() / 2, self.height() / 2)
+        pt -= self.startPt
         self.move(pt)
         
     def mouseReleaseEvent(self, e):
