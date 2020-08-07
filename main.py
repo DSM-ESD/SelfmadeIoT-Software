@@ -10,6 +10,7 @@ class Main(QWidget):
     def __init__(self):
         super().__init__()
         self.resize(1500,900)
+        self.setFixedSize(1500, 900)
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setStyleSheet('Main { background-color: #0070AA }')
         self.widgetBox = QRect(20,20,260,860)
