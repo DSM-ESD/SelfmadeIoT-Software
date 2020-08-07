@@ -24,10 +24,15 @@ class Main(QWidget):
         self.changeCombo.addItem(' 거실 환풍기')
         self.changeCombo.addItem(' 거실 에어컨')
 
-        self.temp = CodeWidget('#0000C0', 15, self)
-        self.temp.setGeometry(50, 50, 200, 50)
+        self.temp = CodeWidget('rgb(91, 155, 213)', 15, self)
+        self.temp.setGeometry(50, 50, 200, 70)
         self.temp.setAlignment(Qt.AlignCenter)
-        self.temp.setText('dasdsa')
+        self.temp.setText('code block : 1')
+
+        self.humi = CodeWidget('rgb(91, 155, 213)', 15, self)
+        self.humi.setGeometry(50, 140, 200, 70)
+        self.humi.setAlignment(Qt.AlignCenter)
+        self.humi.setText('code blck : 2')
 
     def paintEvent(self, e):
         qp = QPainter(self)
