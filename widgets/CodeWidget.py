@@ -2,9 +2,12 @@ from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtCore import QPoint
 from .LabelWidget import *
 class CodeWidget(LabelWidget):
-    def __init__(self, color, border, parent = None):
+    def __init__(self, color, border, parent, onRelease = None, onDragging = None):
         super().__init__(color, border, parent)
         self.resize(200,70)
+        self.onRelease = onRelease
+        self.onDragging = onDragging
+    
         self.hasParent = False
         self.hasChild = False
         self.enableMove = True
@@ -37,15 +40,19 @@ class CodeWidget(LabelWidget):
     def mousePressEvent(self, e):
         if self.enableMove:
             self.isDragging = True
-        self.startPt = QPoint(e.x(), e.y())
+        self.startPt = e.pos()
 
     def mouseMoveEvent(self, e):
         if not self.isDragging or e.buttons() & Qt.NoButton:
             return
-        pt = self.mapToParent(QPoint(e.x(), e.y()))
+        pt = self.mapToParent(e.pos())
+        if self.onDragging:
+            self.onDragging.emit(self, pt)
         pt -= self.startPt
         self.move(pt)
         
     def mouseReleaseEvent(self, e):
+        if self.isDragging and self.onRelease:
+            self.onRelease.emit(self)
         self.isDragging = False
         
