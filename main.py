@@ -5,8 +5,12 @@ from widgets.ButtonWidget import *
 from widgets.ComboWidget import *
 from widgets.LabelWidget import *
 from widgets.CodeWidget import *
+from widgets.FunctionWidget import *
+
+# rgb(91, 155, 213)
 
 class Main(QWidget):
+    releaseSignal = pyqtSignal()
     def __init__(self):
         super().__init__()
         self.resize(1500,900)
@@ -15,6 +19,7 @@ class Main(QWidget):
         self.setStyleSheet('Main { background-color: #0070AA }')
         self.widgetBox = QRect(20,20,260,860)
         self.codeBox = QRect(300,120,1180,760)
+        self.releaseSignal.connect(self.onBlockReleased)
 
         self.setButton = ButtonWidget('white', 10, 16, '나눔스퀘어', '기기 설정', self) # 기기 설정 버튼
         self.setButton.setGeometry(1060,20,200,70)
@@ -25,7 +30,9 @@ class Main(QWidget):
         self.changeCombo.addItem(' 거실 환풍기')
         self.changeCombo.addItem(' 거실 에어컨')
 
-        self.temp = CodeWidget('rgb(91, 155, 213)', 15, self)
+        self.func = FunctionWidget(self, QPoint(500,500), '반복', 'ㅇ')
+
+        self.temp = CodeWidget('', 15, self)
         self.temp.setGeometry(50, 50, 200, 70)
         self.temp.setAlignment(Qt.AlignCenter)
         self.temp.setText('code block : 1')
@@ -40,6 +47,9 @@ class Main(QWidget):
         qp.fillRect(self.widgetBox, QColor('white'))
         qp.fillRect(self.codeBox, QColor('white'))
         qp.end()
+
+    def onBlockReleased(self):
+
 
 
 if __name__ == '__main__':
