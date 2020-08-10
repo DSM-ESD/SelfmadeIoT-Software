@@ -7,7 +7,7 @@ from widgets.LabelWidget import *
 from widgets.CodeWidget import *
 from widgets.FunctionWidget import *
 
-# rgb(91, 155, 213)
+# 
 
 class Main(QWidget):
     releaseSignal = pyqtSignal(QWidget)
@@ -34,14 +34,22 @@ class Main(QWidget):
 
         self.createFunctions()
 
-        self.temp = CodeWidget('#000000', 15, self, self.releaseSignal, self.draggingSignal)
+        self.temp = CodeWidget('#5B9BD5', 15, self)
         self.temp.setGeometry(50, 50, 200, 70)
-        self.temp.setAlignment(Qt.AlignCenter)
+        self.temp.setDraggingSignal(self.draggingSignal)
+        self.temp.setReleaseSignal(self.releaseSignal)
         self.temp.setText('code block : 1')
 
+        self.humi = CodeWidget('#5B9B00', 15, self)
+        self.humi.setGeometry(50, 200, 200, 70)
+        self.humi.setDraggingSignal(self.draggingSignal)
+        self.humi.setReleaseSignal(self.releaseSignal)
+        self.humi.setText('code block : 1')
+        
     def createFunctions(self):
         self.funcList = [
-            FunctionWidget(self, QPoint(500,500), '반복', 'ㅇ')
+            FunctionWidget(self, QPoint(500,500), '계속 반복', ''),
+            FunctionWidget(self, QPoint(700,500), '원격 신호 1', '')
         ]
 
     def paintEvent(self, e):
@@ -59,31 +67,29 @@ class Main(QWidget):
             if not rect.contains(pos):
                 function.locationRefresh()
                 continue
-            place = QRect(rect.x(), rect.y(), 200, 70)
-            while rect.contains(place.center()):
-                if place.contains(pos):
+            
+            for i, child in enumerate(function.childList):
+                if child.geometry().contains(pos):
                     function.makeBlank(i)
                     return
-                place.moveTop(-70)
-                i += 1
 
 
     def onCodeReleased(self, code):
         print('released', code)
+        isAdded = False
         pt = code.geometry().center()
         for function in self.funcList:
             if not function.area().contains(pt):
                 continue
             if function.blank.contains(pt):
+                if code.hasParent:
+                    code.exitFunction.emit(code)
                 function.addCode(code)
-                return
-        if code.hasParent:
-            code.setChildState(False)
-            code.setParentState(False)
-            for function in self.funcList:
-                if code in function.childList:
-                    function.childList.remove(code)
-                    function.locationRefresh()
+                isAdded = True
+                break
+ 
+        if not isAdded and code.hasParent:
+            code.exitFunction.emit(code)
         
                 
 if __name__ == '__main__':

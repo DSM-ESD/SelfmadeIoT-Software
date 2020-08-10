@@ -1,13 +1,16 @@
 from PyQt5.QtGui import QPainter, QColor
-from PyQt5.QtCore import QPoint
+from PyQt5.QtCore import QPoint, pyqtSignal
+from PyQt5.QtWidgets import QWidget
 from .LabelWidget import *
+
 class CodeWidget(LabelWidget):
-    def __init__(self, color, border, parent, onRelease = None, onDragging = None):
+    exitFunction = pyqtSignal(QWidget)
+    def __init__(self, color, border, parent):
         super().__init__(color, border, parent)
         self.resize(200,70)
-        self.onRelease = onRelease
-        self.onDragging = onDragging
-    
+        
+        self.onDragging = None
+        self.onRelease = None
         self.hasParent = False
         self.hasChild = False
         self.enableMove = True
@@ -17,6 +20,12 @@ class CodeWidget(LabelWidget):
         self.setStyleSheet(self.styleSheet() + 'CodeWidget { font: 15pt 나눔스퀘어; color: white} ')
         self.setAlignment(Qt.AlignCenter)
         
+    def setReleaseSignal(self, signal):
+        self.onRelease = signal
+
+    def setDraggingSignal(self, signal):
+        self.onDragging = signal
+
     def paintEvent(self, event):
         painter = QPainter(self)
         if self.hasChild:
