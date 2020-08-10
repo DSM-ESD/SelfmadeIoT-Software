@@ -5,10 +5,11 @@ from .LabelWidget import *
 
 class CodeWidget(LabelWidget):
     exitFunction = pyqtSignal(QWidget)
-    def __init__(self, color, border, parent):
+    def __init__(self, color, border, parent, code):
         super().__init__(color, border, parent)
         self.resize(200,70)
         
+        self.code = code
         self.onDragging = None
         self.onRelease = None
         self.hasParent = False
@@ -17,7 +18,7 @@ class CodeWidget(LabelWidget):
         self.isDragging = False
         self.color = color
         self.startPt = QPoint()
-        self.setStyleSheet(self.styleSheet() + 'CodeWidget { font: 15pt 나눔스퀘어; color: white} ')
+        self.setStyleSheet(self.styleSheet() + 'CodeWidget { font: 16pt \"나눔스퀘어 Bold\"; color: white} ')
         self.setAlignment(Qt.AlignCenter)
         
     def setReleaseSignal(self, signal):
@@ -58,10 +59,14 @@ class CodeWidget(LabelWidget):
         if self.onDragging:
             self.onDragging.emit(self, pt)
         pt -= self.startPt
+        
+        self.exitFunction.emit(self)
         self.move(pt)
         
     def mouseReleaseEvent(self, e):
         if self.isDragging and self.onRelease:
             self.onRelease.emit(self)
         self.isDragging = False
+
+
         

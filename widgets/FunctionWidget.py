@@ -3,7 +3,7 @@ from .CodeWidget import *
 
 class FunctionWidget(CodeWidget):
     def __init__(self, parent, pt, name, code):
-        super().__init__('#202020', 25, parent)
+        super().__init__('#202020', 25, parent, code)
 
         self.move(pt)        
         self.setParentState(True)
@@ -11,12 +11,18 @@ class FunctionWidget(CodeWidget):
         self.isBlanked = False
         self.blankIdx = -1
 
-        endWidget = CodeWidget('#303030', 25, parent)
+        endWidget = CodeWidget('#303030', 25, parent, b'\x03')
         endWidget.move(pt.x(), pt.y() + self.height())
         endWidget.setChildState(True)
         endWidget.setEnableMove(False)
         self.childList = [endWidget]
     
+    def sourceCode(self):
+        array = self.code
+        for child in self.childList:
+            array += child.code
+        return array
+
     def area(self):
         return QRect(self.pos().x(), self.pos().y() + 70, 200, 70 * len(self.childList) + 70)
 
@@ -37,14 +43,11 @@ class FunctionWidget(CodeWidget):
         self.locationRefresh()
 
     def makeBlank(self, idx):
-        if self.isBlanked:
-            return
         for child in self.childList[idx:]:
             child.move(self.x(), child.y() + 70)
         self.blank = QRect(self.x(), self.y() + (idx + 1) * 70, 200, 70)
         self.blankIdx = idx
         self.isBlanked = True
-        print(idx)
 
     def locationRefresh(self):
         y = self.y() + self.height()

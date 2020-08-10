@@ -7,8 +7,6 @@ from widgets.LabelWidget import *
 from widgets.CodeWidget import *
 from widgets.FunctionWidget import *
 
-# 
-
 class Main(QWidget):
     releaseSignal = pyqtSignal(QWidget)
     draggingSignal = pyqtSignal(QWidget, QPoint)
@@ -34,13 +32,13 @@ class Main(QWidget):
 
         self.createFunctions()
 
-        self.temp = CodeWidget('#5B9BD5', 15, self)
+        self.temp = CodeWidget('#5B9BD5', 15, self, b'bb')
         self.temp.setGeometry(50, 50, 200, 70)
         self.temp.setDraggingSignal(self.draggingSignal)
         self.temp.setReleaseSignal(self.releaseSignal)
         self.temp.setText('code block : 1')
 
-        self.humi = CodeWidget('#5B9B00', 15, self)
+        self.humi = CodeWidget('#5B9B00', 15, self, b'aa')
         self.humi.setGeometry(50, 200, 200, 70)
         self.humi.setDraggingSignal(self.draggingSignal)
         self.humi.setReleaseSignal(self.releaseSignal)
@@ -48,9 +46,15 @@ class Main(QWidget):
         
     def createFunctions(self):
         self.funcList = [
-            FunctionWidget(self, QPoint(500,500), '계속 반복', ''),
-            FunctionWidget(self, QPoint(700,500), '원격 신호 1', '')
+            FunctionWidget(self, QPoint(330,150), '계속 반복', b'loop'),
+            FunctionWidget(self, QPoint(660,150), '원격 신호 1', b'sig1'),
+            FunctionWidget(self, QPoint(960,150), '원격 신호 2', b'sig2'),
+            FunctionWidget(self, QPoint(1260,150), '      에 실행', b'time')
         ]
+
+    def createWidgets(self):
+        pass
+
 
     def paintEvent(self, e):
         qp = QPainter(self)
@@ -70,16 +74,16 @@ class Main(QWidget):
             
             for i, child in enumerate(function.childList):
                 if child.geometry().contains(pos):
+                    if function.isBlanked:
+                        function.locationRefresh()
                     function.makeBlank(i)
                     return
 
-
     def onCodeReleased(self, code):
-        print('released', code)
-        isAdded = False
         pt = code.geometry().center()
         for function in self.funcList:
             if not function.area().contains(pt):
+                function.locationRefresh()
                 continue
             if function.blank.contains(pt):
                 if code.hasParent:
@@ -87,9 +91,7 @@ class Main(QWidget):
                 function.addCode(code)
                 isAdded = True
                 break
- 
-        if not isAdded and code.hasParent:
-            code.exitFunction.emit(code)
+            function.locationRefresh()
         
                 
 if __name__ == '__main__':
