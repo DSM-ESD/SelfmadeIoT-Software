@@ -5,6 +5,7 @@ from widgets.ButtonWidget import *
 from widgets.ComboWidget import *
 from widgets.LabelWidget import *
 from widgets.CodeWidget import *
+from widgets.EditWidget import *
 from widgets.FunctionWidget import *
 
 class Main(QWidget):
@@ -31,6 +32,7 @@ class Main(QWidget):
         self.changeCombo.addItem(' 거실 에어컨')
 
         self.createFunctions()
+        self.createWidgets()
 
         self.temp = CodeWidget('#5B9BD5', 15, self, b'bb')
         self.temp.setGeometry(50, 50, 200, 70)
@@ -44,12 +46,13 @@ class Main(QWidget):
         self.humi.setReleaseSignal(self.releaseSignal)
         self.humi.setText('code block : 1')
         
+        
     def createFunctions(self):
         self.funcList = [
             FunctionWidget(self, QPoint(330,150), '계속 반복', b'loop'),
             FunctionWidget(self, QPoint(660,150), '원격 신호 1', b'sig1'),
             FunctionWidget(self, QPoint(960,150), '원격 신호 2', b'sig2'),
-            FunctionWidget(self, QPoint(1260,150), '      에 실행', b'time')
+            FunctionWidget(self, QPoint(1260,150), '', b'time')
         ]
 
     def createWidgets(self):

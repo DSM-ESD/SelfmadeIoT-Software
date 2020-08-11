@@ -5,7 +5,7 @@ from .LabelWidget import *
 
 class CodeWidget(LabelWidget):
     exitFunction = pyqtSignal(QWidget)
-    def __init__(self, color, border, parent, code):
+    def __init__(self, color, border, parent, code = None):
         super().__init__(color, border, parent)
         self.resize(200,70)
         
@@ -21,6 +21,9 @@ class CodeWidget(LabelWidget):
         self.setStyleSheet(self.styleSheet() + 'CodeWidget { font: 16pt \"나눔스퀘어 Bold\"; color: white} ')
         self.setAlignment(Qt.AlignCenter)
         
+    def getCode(self):
+        return self.code
+
     def setReleaseSignal(self, signal):
         self.onRelease = signal
 
