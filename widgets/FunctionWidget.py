@@ -11,7 +11,7 @@ class FunctionWidget(CodeWidget):
         self.isBlanked = False
         self.blankIdx = -1
 
-        endWidget = CodeWidget('#303030', 25, parent, b'\x03')
+        endWidget = CodeWidget('#303030', 25, parent)
         endWidget.move(pt.x(), pt.y() + self.height())
         endWidget.setChildState(True)
         endWidget.setEnableMove(False)
@@ -20,7 +20,8 @@ class FunctionWidget(CodeWidget):
     def sourceCode(self):
         array = self.code + b'|'
         for child in self.childList:
-            array += child.getCode + '|'
+            if child.getCode():
+                array += child.getCode() + b'|'
         return array
 
     def area(self):
