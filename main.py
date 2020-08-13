@@ -5,8 +5,9 @@ from widgets.ButtonWidget import *
 from widgets.ComboWidget import *
 from widgets.LabelWidget import *
 from widgets.CodeWidget import *
-from widgets.EditWidget import *
+from widgets.SpinWidget import *
 from widgets.FunctionWidget import *
+from widgets.SleepWidget import *
 
 class Main(QWidget):
     releaseSignal = pyqtSignal(QWidget)
@@ -40,11 +41,11 @@ class Main(QWidget):
         self.temp.setReleaseSignal(self.releaseSignal)
         self.temp.setText('code block : 1')
 
-        self.humi = CodeWidget('#5B9B00', 15, self, b'aa')
+        self.humi = SleepWidget(self)
         self.humi.setGeometry(50, 200, 200, 70)
         self.humi.setDraggingSignal(self.draggingSignal)
         self.humi.setReleaseSignal(self.releaseSignal)
-        self.humi.setText('code block : 1')
+
         
         
     def createFunctions(self):
@@ -103,3 +104,6 @@ if __name__ == '__main__':
     ui = Main()
     ui.show()
     sys.exit(app.exec_())
+
+
+    
