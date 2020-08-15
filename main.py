@@ -22,16 +22,24 @@ class Main(QWidget):
         self.codeBox = QRect(300,120,1180,760)
         self.binBox = QRect(840,20,200,70)
         self.releaseSignal.connect(self.onCodeReleased)
-        self.draggingSignal.connect(self.onCodeDragging)
+        self.draggingSignal.connect(self.onCodeDragging)     
 
         self.setButton = ButtonWidget('white', 0, 16, '나눔스퀘어 Bold', '기기 설정', self) # 기기 설정 버튼
         self.setButton.setGeometry(1060,20,200,70)
+        self.setButton.clicked.connect(self.onSetModule)
         self.uploadButton = ButtonWidget('white', 0, 16, '나눔스퀘어 Bold', '업로드', self) # 기기 변경 버튼
         self.uploadButton.setGeometry(1280,20,200,70)
+        self.uploadButton.clicked.connect(self.onUpload)
 
-        self.widgetList = []
+        self.widgetList = [None for _ in range(5)]
         self.createFunctions()
         self.createWidgets()
+
+    def onUpload(self):
+        pass
+
+    def onSetModule(self):
+        pass
 
     def createFunctions(self):
         self.funcList = [
@@ -40,37 +48,12 @@ class Main(QWidget):
             FunctionWidget(self, QPoint(960,150), '원격 신호 2', b'sig2'),
             FunctionWidget(self, QPoint(1260,150), '', b'time')
         ]
-
-    def createWidgets(self):
-        on = CodeWidget('#44BD41', 15, self, b'son')
-        on.setGeometry(50, 250, 200, 70)
-        on.setDraggingSignal(self.draggingSignal)
-        on.setReleaseSignal(self.releaseSignal)
-        on.setText('스위치 ON')
-
-        off = CodeWidget('#E22929', 15, self, b'soff')
-        off.setGeometry(50, 350, 200, 70)
-        off.setDraggingSignal(self.draggingSignal)
-        off.setReleaseSignal(self.releaseSignal)
-        off.setText('스위치 OFF')
-
-        sleep = SleepWidget(self)
-        sleep.setGeometry(50, 450, 200, 70)
-        sleep.setDraggingSignal(self.draggingSignal)
-        sleep.setReleaseSignal(self.releaseSignal)
-
-        buzzon = CodeWidget('#81158A', 15, self, b'bon')
-        buzzon.setGeometry(50, 550, 200, 70)
-        buzzon.setDraggingSignal(self.draggingSignal)
-        buzzon.setReleaseSignal(self.releaseSignal)
-        buzzon.setText('부저 ON')
-
-        buzzoff = CodeWidget('#C21066', 15, self, b'boff')
-        buzzoff.setGeometry(50, 650, 200, 70)
-        buzzoff.setDraggingSignal(self.draggingSignal)
-        buzzoff.setReleaseSignal(self.releaseSignal)
-        buzzoff.setText('부저 OFF')
-
+        
+    def mousePressEvent(self, e):
+        code = b''
+        for function in self.funcList:
+            code += function.sourceCode()
+        print(code)
 
     def paintEvent(self, e):
         pix = QPixmap('trash.png')
@@ -100,6 +83,14 @@ class Main(QWidget):
                     return
 
     def onCodeReleased(self, code):
+        print('dasd')
+        try:
+            idx = self.widgetList.index(code)
+            self.widgetList[idx] = None
+            self.createWidgets()
+        except:
+            pass        
+
         if self.binBox.contains(code.geometry().center()):
             code.deleteLater()
             return
@@ -112,10 +103,56 @@ class Main(QWidget):
                 if code.hasParent:
                     code.exitFunction.emit(code)
                 function.addCode(code)
-                print(function.sourceCode())
-                self.createWidgets()
+                
                 break
             function.locationRefresh()
+
+    def createWidgets(self):
+        print('dasd')
+        if not self.widgetList[0]:
+            on = CodeWidget('#44BD41', 15, self, b'son')
+            on.setGeometry(50, 250, 200, 70)
+            on.setDraggingSignal(self.draggingSignal)
+            on.setReleaseSignal(self.releaseSignal)
+            on.setText('스위치 ON')
+            on.show()
+            self.widgetList[0] = on
+
+        if not self.widgetList[1]:
+            off = CodeWidget('#E22929', 15, self, b'soff')
+            off.setGeometry(50, 350, 200, 70)
+            off.setDraggingSignal(self.draggingSignal)
+            off.setReleaseSignal(self.releaseSignal)
+            off.setText('스위치 OFF')
+            off.show()
+            self.widgetList[1] = off
+
+
+        if not self.widgetList[2]:
+            sleep = SleepWidget(self)
+            sleep.setGeometry(50, 450, 200, 70)
+            sleep.setDraggingSignal(self.draggingSignal)
+            sleep.setReleaseSignal(self.releaseSignal)
+            sleep.show()
+            self.widgetList[2] = sleep
+
+        if not self.widgetList[3]:
+            buzzon = CodeWidget('#81158A', 15, self, b'bon')
+            buzzon.setGeometry(50, 550, 200, 70)
+            buzzon.setDraggingSignal(self.draggingSignal)
+            buzzon.setReleaseSignal(self.releaseSignal)
+            buzzon.setText('부저 ON')
+            buzzon.show()        
+            self.widgetList[3] = buzzon
+
+        if not self.widgetList[4]:
+            buzzoff = CodeWidget('#C21066', 15, self, b'boff')
+            buzzoff.setGeometry(50, 650, 200, 70)
+            buzzoff.setDraggingSignal(self.draggingSignal)
+            buzzoff.setReleaseSignal(self.releaseSignal)
+            buzzoff.setText('부저 OFF')
+            buzzoff.show()
+            self.widgetList[4] = buzzoff
         
                 
 if __name__ == '__main__':
