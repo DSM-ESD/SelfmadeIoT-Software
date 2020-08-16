@@ -18,10 +18,10 @@ class FunctionWidget(CodeWidget):
         self.childList = [endWidget]
     
     def sourceCode(self):
-        array = self.code + b'|'
+        array = self.code + b' '
         for child in self.childList:
             if child.getCode():
-                array += child.getCode() + b'|'
+                array += child.getCode() + b' '
         return array
 
     def area(self):

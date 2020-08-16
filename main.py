@@ -7,6 +7,7 @@ from widgets.LabelWidget import *
 from widgets.CodeWidget import *
 from widgets.SpinWidget import *
 from widgets.FunctionWidget import *
+from widgets.TimeFunctionWidget import *
 from widgets.SleepWidget import *
 
 class Main(QWidget):
@@ -36,7 +37,10 @@ class Main(QWidget):
         self.createWidgets()
 
     def onUpload(self):
-        pass
+        code = b''
+        for function in self.funcList:
+            code += function.sourceCode()
+        print(code)
 
     def onSetModule(self):
         pass
@@ -46,14 +50,9 @@ class Main(QWidget):
             FunctionWidget(self, QPoint(330,150), '계속 반복', b'loop'),
             FunctionWidget(self, QPoint(660,150), '원격 신호 1', b'sig1'),
             FunctionWidget(self, QPoint(960,150), '원격 신호 2', b'sig2'),
-            FunctionWidget(self, QPoint(1260,150), '', b'time')
+            TimeFunctionWidget(self, QPoint(1260,150), 'das')
         ]
-        
-    def mousePressEvent(self, e):
-        code = b''
-        for function in self.funcList:
-            code += function.sourceCode()
-        print(code)
+
 
     def paintEvent(self, e):
         pix = QPixmap('trash.png')
@@ -81,9 +80,9 @@ class Main(QWidget):
                         function.locationRefresh()
                     function.makeBlank(i)
                     return
+    
 
     def onCodeReleased(self, code):
-        print('dasd')
         try:
             idx = self.widgetList.index(code)
             self.widgetList[idx] = None
@@ -108,7 +107,6 @@ class Main(QWidget):
             function.locationRefresh()
 
     def createWidgets(self):
-        print('dasd')
         if not self.widgetList[0]:
             on = CodeWidget('#44BD41', 15, self, b'son')
             on.setGeometry(50, 250, 200, 70)
