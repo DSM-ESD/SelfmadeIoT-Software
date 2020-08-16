@@ -17,7 +17,9 @@ class Main(QWidget):
         super().__init__()
         self.resize(1500,900)
         self.setFixedSize(1500, 900)
+        self.setWindowTitle('Selfmade-IoT')
         self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setWindowIcon(QIcon('res/icon.ico'))
         self.setStyleSheet('Main { background-color: #0070AA }')
         self.widgetBox = QRect(20,120,260,760)
         self.codeBox = QRect(300,120,1180,760)
@@ -55,7 +57,7 @@ class Main(QWidget):
 
 
     def paintEvent(self, e):
-        pix = QPixmap('trash.png')
+        pix = QPixmap('res/trash.png')
         qp = QPainter(self)
         rect = QRect(self.binBox)
         qp.fillRect(self.widgetBox, QColor('white'))
