@@ -25,12 +25,9 @@ void setup()
 
 void loop()
 {
-  if(BT.available()) // 블루투스로 들어온 값을 시리얼로 전송
-    Serial.write(BT.read());
-    
-  if (Serial.available()) // 시리얼로 들어온 값이 있을때 실행
+  if (BT.available()) // 블루투스로 들어온 값을 시리얼로 전송
   {
-    blue_str = Serial.readString();
+    blue_str = BT.readString();
     delay(10);
 
     if (blue_str == "sig1\r\n") signal_1();
