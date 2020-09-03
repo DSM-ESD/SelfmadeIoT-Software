@@ -9,6 +9,9 @@ from widgets.SpinWidget import *
 from widgets.FunctionWidget import *
 from widgets.TimeFunctionWidget import *
 from widgets.SleepWidget import *
+from dialogs.LoginDlg import *
+import requests, json
+
 
 class Main(QWidget):
     releaseSignal = pyqtSignal(QWidget)
@@ -25,11 +28,12 @@ class Main(QWidget):
         self.codeBox = QRect(300,120,1180,760)
         self.binBox = QRect(840,20,200,70)
         self.releaseSignal.connect(self.onCodeReleased)
-        self.draggingSignal.connect(self.onCodeDragging)     
+        self.draggingSignal.connect(self.onCodeDragging)
+        self.info = None    
 
-        self.setButton = ButtonWidget('white', 0, 16, '나눔스퀘어 Bold', '기기 설정', self) # 기기 설정 버튼
-        self.setButton.setGeometry(1060,20,200,70)
-        self.setButton.clicked.connect(self.onSetModule)
+        self.loginButton = ButtonWidget('white', 0, 16, '나눔스퀘어 Bold', '로그인', self)
+        self.loginButton.setGeometry(1060,20,200,70)
+        self.loginButton.clicked.connect(self.onLogin)
         self.uploadButton = ButtonWidget('white', 0, 16, '나눔스퀘어 Bold', '업로드', self) # 기기 변경 버튼
         self.uploadButton.setGeometry(1280,20,200,70)
         self.uploadButton.clicked.connect(self.onUpload)
@@ -42,17 +46,29 @@ class Main(QWidget):
         code = b''
         for function in self.funcList:
             code += function.sourceCode()
-        print(code)
+        
+        id = 'dd'
+        pw = '11'
+        url='http://localhost:5000/receive'
+        headers = {'Content-Type' : 'application/json; charset=utf-8'}
+        data = {"id" : id, "password" : pw, "code" : code.decode('utf-8')}
+        print(code.decode('utf-8'))
+        res = requests.post(url, headers = headers, data=json.dumps(data))
+        print(res.text)
 
-    def onSetModule(self):
-        pass
+
+    def onLogin(self):
+        dlg = LoginDlg(self)
+        if dlg.info:
+            self.info = dlg.info
+
 
     def createFunctions(self):
         self.funcList = [
             FunctionWidget(self, QPoint(330,150), '계속 반복', b'loop'),
             FunctionWidget(self, QPoint(660,150), '원격 신호 1', b'sig1'),
             FunctionWidget(self, QPoint(960,150), '원격 신호 2', b'sig2'),
-            TimeFunctionWidget(self, QPoint(1260,150), 'das')
+            TimeFunctionWidget(self, QPoint(1260,150))
         ]
 
 
@@ -104,7 +120,6 @@ class Main(QWidget):
                 if code.hasParent:
                     code.exitFunction.emit(code)
                 function.addCode(code)
-                
                 break
             function.locationRefresh()
 
@@ -161,6 +176,3 @@ if __name__ == '__main__':
     ui = Main()
     ui.show()
     sys.exit(app.exec_())
-
-
-    

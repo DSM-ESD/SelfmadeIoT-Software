@@ -24,14 +24,14 @@ void setup()
 }
 
 void loop()
-{
+{    
   if (BT.available()) // 블루투스로 들어온 값을 시리얼로 전송
   {
     blue_str = BT.readString();
     delay(10);
 
-    if (blue_str == "sig1\r\n") signal_1();
-    else if (blue_str == "sig2\r\n") signal_2();
+    if (blue_str == "sig1") signal_1();
+    else if (blue_str == "sig2") signal_2();
     else if (blue_str == "com\r\n") comval();
     else code_set();
   }

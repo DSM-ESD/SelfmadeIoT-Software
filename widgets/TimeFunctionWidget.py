@@ -2,8 +2,8 @@ from .FunctionWidget import *
 from .SpinWidget import *
 
 class TimeFunctionWidget(FunctionWidget):
-    def __init__(self, parent, pt, name):
-        super().__init__(parent, pt, name, None)
+    def __init__(self, parent, pt):
+        super().__init__(parent, pt, None, None)
 
         self.spinHour = SpinWidget(self)
         self.spinHour.setGeometry(18,15,60,40)

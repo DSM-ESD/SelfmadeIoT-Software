@@ -17,4 +17,4 @@ class SleepWidget(CodeWidget):
         self.comboWidget.setCurrentIndex(0)
 
     def getCode(self):
-        return ('sleep%4s%2s' % (self.spinTime.text(), self.comboWidget.currentText())).encode()
+        return ('sleep %04d%2s' % (int(self.spinTime.text()), self.comboWidget.currentText())).encode()

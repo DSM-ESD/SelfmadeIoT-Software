@@ -49,4 +49,5 @@ void code_set()
     else str += blue_str[i]; // 문자열 더하기
     delay(1);
   }
+  comval();
 }
